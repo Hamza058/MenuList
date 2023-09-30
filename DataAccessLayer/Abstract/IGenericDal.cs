@@ -9,9 +9,9 @@ namespace DataAccessLayer.Abstract
 {
     public interface IGenericDal<T>
     {
-        void Insert(Task t);
-        void Delete(Task t);
-        void Update(Task t);
+        void Insert(T t);
+        void Delete(T t);
+        void Update(T t);
         List<T> GetList();
         T Get(Expression<Func<T, bool>> filter);
     }
