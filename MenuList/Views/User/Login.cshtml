@@ -1,0 +1,19 @@
+﻿﻿@using EntityLayer.Concrete
+@model User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+@{
+    if(ViewBag.Message != null)
+    {
+        <p>@ViewBag.Message</p>
+    }
+}
+<form asp-controller="User" asp-action="Login" method="post">
+    <input asp-for="UserName" placeholder="Adınız" />
+    <input type="password" asp-for="Password" placeholder="Parolanız" />
+    <input type="submit" value="Giriş Yap" />
+</form>

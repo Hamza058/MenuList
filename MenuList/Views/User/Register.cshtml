@@ -1,0 +1,15 @@
+﻿﻿@using EntityLayer.Concrete
+@model User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+
+<form asp-controller="User" asp-action="Register" method="post">
+    <input asp-for="UserName" placeholder="Adınız" />
+    <input type="password" asp-for="Password" placeholder="Parolanız" />
+    <input type="submit" value="Kaydet" />
+</form>
+
