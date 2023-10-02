@@ -20,10 +20,22 @@ namespace MenuList.Controllers
 			return Json(pm.TGetList());
 		}
 
+		public IActionResult Admin()
+		{
+			return View();
+		}
+
 		[HttpPost]
 		public IActionResult Add(Product product)
 		{
             pm.TAdd(product);
+			return Json(new { IsSuccess = "true" });
+		}
+
+		[HttpDelete]
+		public IActionResult Delete(int id)
+		{
+			pm.TDelete(pm.TGetById(id));
 			return Json(new { IsSuccess = "true" });
 		}
 	}
