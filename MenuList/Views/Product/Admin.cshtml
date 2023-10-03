@@ -9,9 +9,11 @@
     <script type="text/javascript">
 		function loadProducts() {
 			$("#loading").show();
+			var search = $("#search").val();
 			$.ajax({
 				type: "Get",
-				url: "/Product/Get",
+				url: `/Product/Get/`,
+				data: { name: search },
 				success: function (data) {
 					$("#values").html("");
 					$.each(data, function (index, item) {
@@ -22,7 +24,7 @@
 										<td>${item.description}</td>
 										<td>${item.price}</td>
 										<td>${item.categoryId}
-										<td><img src="/img/${item.image}" class="border border-dark m-2" width="15%" /></td>
+										<td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
 										<td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
 									</tr>
 								`;
@@ -53,6 +55,12 @@
 }
 
 <h1>Ürünler</h1>
+
+<div class="search mb-2">
+	<input id="search" type="text" placeholder="Arama..." />
+	<i onclick="loadProducts()" type="button" class="bx bx-search"></i>
+</div>
+
 <table class="table table-primary text-center">
 	<thead>
 		<tr>

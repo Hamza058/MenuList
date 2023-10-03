@@ -22,9 +22,11 @@ namespace MenuList.Controllers
         }
 
 		[HttpGet]
-		public IActionResult Get()
+		public IActionResult Get(string name)
 		{
-			return Json(pm.TGetList());
+			if (name == null)
+				name = "";
+			return Json(pm.TGetList().Where(x=>x.ProductName.ToLower().Contains(name.ToLower())).ToList());
 		}
 
 		public IActionResult Admin()
@@ -53,7 +55,12 @@ namespace MenuList.Controllers
 		[HttpDelete]
 		public IActionResult Delete(int id)
 		{
-			pm.TDelete(pm.TGetById(id));
+			var product = pm.TGetById(id);
+			var root = _fileProvider.GetDirectoryContents("wwwroot");
+			var images = root.First(x => x.Name == "img");
+			var path = Path.Combine(images.PhysicalPath, product.Image);
+			System.IO.File.Delete(path);
+			pm.TDelete(product);
 			return Json(new { IsSuccess = "true" });
 		}
 	}
