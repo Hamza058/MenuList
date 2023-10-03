@@ -3,6 +3,7 @@ using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using System.Runtime.InteropServices;
 
 namespace MenuList.Controllers
 {
@@ -26,7 +27,8 @@ namespace MenuList.Controllers
 		{
 			if (name == null)
 				name = "";
-			return Json(pm.TGetList().Where(x=>x.ProductName.ToLower().Contains(name.ToLower())).ToList());
+			var products = pm.TGetCategory().Where(x => x.ProductName.ToLower().Contains(name.ToLower())).ToList();
+			return Json(products);
 		}
 
 		public IActionResult Admin()

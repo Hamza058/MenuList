@@ -7,6 +7,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
+builder.Services.AddControllersWithViews()
+	.AddNewtonsoftJson(options =>
+	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
