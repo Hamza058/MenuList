@@ -1,4 +1,6 @@
-﻿
+﻿@using EntityLayer.Concrete
+@model Product
+
 @{
     ViewData["Title"] = "Admin";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,7 +15,6 @@
 				success: function (data) {
 					$("#values").html("");
 					$.each(data, function (index, item) {
-						console.log(item);
 						let comment = `
 									<tr>
 										<td>${index}</td>
@@ -21,7 +22,7 @@
 										<td>${item.description}</td>
 										<td>${item.price}</td>
 										<td>${item.categoryId}
-										<td><img src="${item.image}" class="rounded-circle border border-dark m-2" width="50%" /></td>
+										<td><img src="/img/${item.image}" class="border border-dark m-2" width="15%" /></td>
 										<td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
 									</tr>
 								`;
@@ -35,27 +36,6 @@
 			})
 		}
 		loadProducts();
-        $("#btnSave").click(function () {
-            var name = $("#name").val();
-            var description = $("#description").val();
-			var price = $("#price").val();
-            var file = document.getElementById("image").files[0]['name'];
-
-            var jsonData = { "productName": name, "description": description, "price": price, "image": file, "categoryId": 1 };
-
-			$.ajax({
-				type: "POST",
-				url: "/Product/Add",
-				data: jsonData,
-				success: function (data) {
-                    console.log("Eklendi");
-					loadProducts();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		})
 		function Delete(id) {
 			$.ajax({
 				type: "Delete",
@@ -94,25 +74,27 @@
 	</div>
 </div>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProduct">Ürün Ekle</button>
+<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#addProduct">Ürün Ekle</button>
 <div class="modal" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Ürün Bilgileri</h1>
             </div>
-            <div>
-                <div class="modal-body">
-                    <input type="text" id="name" class="form-control mb-2" placeholder="Ürün adı" />
-                    <input type="text" id="description" class="form-control mb-2" placeholder="Ürün açıklaması" />
-                    <input type="text" id="price" class="form-control mb-2" placeholder="Ürün fiyatı" />
-                    <input type="file" id="image" class="form-control" />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" data-bs-dismiss="modal" id="btnSave">Kaydet</button>
-                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-            </div>
+			<form asp-action="Add" enctype="multipart/form-data" method="post">
+				<div>
+					<div class="modal-body">
+							<input asp-for="ProductName" class="form-control mb-2" placeholder="Ürün adı" />
+							<input asp-for="Description" class="form-control mb-2" placeholder="Ürün açıklaması" />
+							<input asp-for="Price" class="form-control mb-2" placeholder="Ürün fiyatı" />
+							<input type="file" name="file" class="form-control" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Kaydet</button>
+					<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+				</div>
+			</form>
         </div>
     </div>
 </div>
