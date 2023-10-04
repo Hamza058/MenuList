@@ -1,0 +1,16 @@
+﻿﻿@using EntityLayer.Concrete
+@model User
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Şifre yenileme</h1>
+
+<form asp-action="Update" method="post">
+    <input asp-for= "UserName" placeholder="Adınız" />
+    <input type="password" name="oldPassword" placeholder = "Eski Parolanız" />
+    <input type="password" asp-for= "Password" placeholder = "Yeni Parolanız" />
+    <input type="submit" class="btn btn-primary" value="Kaydet" />
+</form>

@@ -2,6 +2,8 @@
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
+using System;
 
 namespace MenuList.Controllers
 {
@@ -9,6 +11,10 @@ namespace MenuList.Controllers
     {
         UserManager um = new UserManager(new EFUserDal());
 
+        public IActionResult Admin()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Login()
         {
@@ -42,10 +48,26 @@ namespace MenuList.Controllers
         public IActionResult Register(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            Console.WriteLine(user.Password);
             um.TAdd(user);
 
             return RedirectToAction("Login");
+        }
+        [HttpGet]
+        public IActionResult Update()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Update(User user, string oldPassword)
+        {
+            var value = um.TGetList().FirstOrDefault(x => x.UserName == user.UserName && BCrypt.Net.BCrypt.Verify(oldPassword, x.Password));
+            if(value != null)
+            {
+                value.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                um.TUpdate(value);
+                return RedirectToAction("Login");
+            }
+            return RedirectToAction("Update");
         }
     }
 }
