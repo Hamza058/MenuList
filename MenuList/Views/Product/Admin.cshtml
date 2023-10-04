@@ -7,79 +7,101 @@
 }
 @section Scripts{
     <script type="text/javascript">
-		function loadProducts() {
-			$("#loading").show();
-			var search = $("#search").val();
-			$.ajax({
-				type: "Get",
-				url: `/Product/Get/`,
-				data: { name: search },
-				success: function (data) {
-					$("#values").html("");
-					$.each(data, function (index, item) {
-						let comment = `
-									<tr>
-										<td>${index}</td>
-										<td>${item.productName}</td>
-										<td>${item.description}</td>
-										<td>${item.price}</td>
-										<td>${item.categories.categoryName}
-										<td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
-										<td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
-									</tr>
-								`;
-						$("#values").append(comment);
-					});
-					$("#loading").hide();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		loadProducts();
-		function Delete(id) {
-			$.ajax({
-				type: "Delete",
-				url: "/Product/Delete",
-				data: { id: id },
-				success: function (data) {
-					loadProducts();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
+        function loadProducts() {
+            $("#loading").show();
+            var search = $("#search").val();
+            $.ajax({
+                type: "Get",
+                url: `/Product/Get/`,
+                data: { name: search },
+                success: function (data) {
+                    $("#values").html("");
+                    $.each(data, function (index, item) {
+                        let product = `
+                                        <tr>
+                                            <td>${index}</td>
+                                            <td>${item.productName}</td>
+                                            <td>${item.description}</td>
+                                            <td>${item.price}</td>
+                                            <td>${item.categories.categoryName}
+                                            <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
+                                            <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
+                                            <td><i onclick="getProducts(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
+                                        </tr>
+                                    `;
+                        $("#values").append(product);
+                    });
+                    $("#loading").hide();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        function getProducts(id) {
+            $.ajax({
+                type: "Get",
+                url: `/Product/GetById/`,
+                data: { id: id },
+                success: function (data) {
+                        let product = `
+                                    <input type="hidden" name="id"  value="${data.productId}" />
+                                    <input name="ProductName" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
+                                    <input name="Description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
+                                    <input name="Price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
+                                    <input type="file" name="file" class="form-control" />
+                                `;
+                        $("#modalValues").append(product);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        loadProducts();
+        function Delete(id) {
+            $.ajax({
+                type: "Delete",
+                url: "/Product/Delete",
+                data: { id: id },
+                success: function (data) {
+                    loadProducts();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
     </script>
 }
 
 <h1>Ürünler</h1>
 
 <div class="search mb-2">
-	<input id="search" type="text" placeholder="Arama..." />
-	<i onclick="loadProducts()" type="button" class="bx bx-search"></i>
+    <input id="search" type="text" placeholder="Arama..." />
+    <i onclick="loadProducts()" type="button" class="bx bx-search"></i>
 </div>
 
 <table class="table table-primary text-center">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th>Ürün Ad</th>
-			<th>Ürün Açıklama</th>
-			<th>Ürün Fiyatı</th>
-			<th>Kategori</th>
-			<th>Resim</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody id="values">
-	</tbody>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ürün Ad</th>
+            <th>Ürün Açıklama</th>
+            <th>Ürün Fiyatı</th>
+            <th>Kategori</th>
+            <th>Resim</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="values">
+    </tbody>
 </table>
 <div id="loading" class="text-center">
-	<div class="spinner-border" role="status">
-		<span class="sr-only"></span>
-	</div>
+    <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+    </div>
 </div>
 
 <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#addProduct">Ürün Ekle</button>
@@ -89,20 +111,36 @@
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Ürün Bilgileri</h1>
             </div>
-			<form asp-action="Add" enctype="multipart/form-data" method="post">
-				<div>
-					<div class="modal-body">
-							<input asp-for="ProductName" class="form-control mb-2" placeholder="Ürün adı" />
-							<input asp-for="Description" class="form-control mb-2" placeholder="Ürün açıklaması" />
-							<input asp-for="Price" class="form-control mb-2" placeholder="Ürün fiyatı" />
-							<input type="file" name="file" class="form-control" />
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Kaydet</button>
-					<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-				</div>
-			</form>
+            <form asp-action="Add" enctype="multipart/form-data" method="post">
+                <div class="modal-body">
+                    <input asp-for="ProductName" class="form-control mb-2" placeholder="Ürün adı" required />
+                    <input asp-for="Description" class="form-control mb-2" placeholder="Ürün açıklaması" required />
+                    <input asp-for="Price" class="form-control mb-2" placeholder="Ürün fiyatı" required />
+                    <input type="file" name="file" class="form-control" accept="image/*" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="updateProduct" tabindex="-1" aria-labelledby="updateProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Ürün Bilgileri</h1>
+            </div>
+            <form asp-action="Update" asp-route-id="id" enctype="multipart/form-data" method="post">
+                <div id="modalValues" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

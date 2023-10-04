@@ -31,6 +31,13 @@ namespace MenuList.Controllers
 			return Json(products);
 		}
 
+		[HttpGet]
+		public IActionResult GetById(int id)
+		{
+			var products = pm.TGetById(id);
+			return Json(products);
+		}
+
 		public IActionResult Admin()
 		{
 			return View();
@@ -65,5 +72,33 @@ namespace MenuList.Controllers
 			pm.TDelete(product);
 			return Json(new { IsSuccess = "true" });
 		}
+
+		[HttpPost]
+		public IActionResult Update(Product product, IFormFile file, int id)
+		{
+
+            var value = pm.TGetById(id);
+			value.ProductName = product.ProductName;
+			value.Description = product.Description;
+			value.Price = product.Price;
+            if (file != null)
+            {
+                var root = _fileProvider.GetDirectoryContents("wwwroot");
+                var images = root.First(x => x.Name == "img");
+
+                var delete_path = Path.Combine(images.PhysicalPath, value.Image);
+                System.IO.File.Delete(delete_path);
+
+                var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                var path = Path.Combine(images.PhysicalPath, randomImageName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                value.Image = randomImageName;
+            }
+            pm.TUpdate(value);
+            return RedirectToAction("Admin");
+        }
 	}
 }
