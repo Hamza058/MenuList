@@ -38,5 +38,20 @@ namespace MenuList.Controllers
 			cm.TDelete(cm.TGetById(id));
 			return Json(new { IsSuccess = "true" });
 		}
+
+		[HttpPost]
+		public IActionResult Update(Category category)
+		{
+			var value = cm.TGetById(category.CategoryId);
+			value.CategoryName = category.CategoryName;
+			cm.TUpdate(value);
+			return RedirectToAction("Admin");
+		}
+
+		[HttpGet]
+		public IActionResult GetById(int id)
+		{
+			return Json(cm.TGetById(id));
+		}
 	}
 }

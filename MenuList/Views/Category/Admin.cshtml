@@ -14,12 +14,12 @@
 				success: function (data) {
 					$("#values").html("");
 					$.each(data, function (index, item) {
-						console.log(item);
 						let comment = `
 											<tr>
 												<td>${index}</td>
 												<td>${item.categoryName}</td>
 												<td><i onclick="Delete(${item.categoryId})" type="button" class="bx bx-trash" /></td>
+												<td><i onclick="getCategory(${item.categoryId})" data-bs-toggle="modal" data-bs-target="#updateCategory" type="button" type="button" class="bx bxs-edit" /></td>
 											</tr>
 										`;
 						$("#values").append(comment);
@@ -63,6 +63,44 @@
 				}
 			})
 		}
+		function getCategory(id) {
+			$.ajax({
+				type: "Get",
+				url: `/Category/GetById/`,
+				data: { id: id },
+				success: function (data) {
+					console.log(data);
+					$("#modalValues").html("");
+					let category = `
+									<input type="hidden" id="id"  value="${data.categoryId}" />
+									<input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
+								`;
+					$("#modalValues").append(category);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			})
+		}
+		$("#btnUpdate").click(function () {
+			var name = $("#categoryName").val();
+			var id = $("#id").val();
+
+			var jsonData = { "categoryId": id, "categoryName": name };
+
+			$.ajax({
+				type: "POST",
+				url: "/Category/Update",
+				data: jsonData,
+				success: function (data) {
+					console.log("Güncellendi");
+					loadCategories();
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			})
+		})
 	</script>
 }
 
@@ -72,6 +110,7 @@
 		<tr>
 			<th>Id</th>
 			<th>Kategori</th>
+			<th></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -98,6 +137,24 @@
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-success" data-bs-dismiss="modal" id="btnSave">Kaydet</button>
+				<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="updateCategory" tabindex="-1" aria-labelledby="updateCategorytLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5">Kategori Bilgileri</h1>
+			</div>
+			<div>
+				<div id="modalValues" class="modal-body">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success" data-bs-dismiss="modal" id="btnUpdate">Kaydet</button>
 				<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
 			</div>
 		</div>
