@@ -1,15 +1,16 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using System.Runtime.InteropServices;
 
 namespace MenuList.Controllers
 {
-    public class ProductController : Controller
-    {
-        ProductManager pm = new ProductManager(new EFProductDal());
+	public class ProductController : Controller
+	{
+		ProductManager pm = new ProductManager(new EFProductDal());
 		private readonly IFileProvider _fileProvider;
 
 		public ProductController(IFileProvider fileProvider)
@@ -18,9 +19,9 @@ namespace MenuList.Controllers
 		}
 
 		public IActionResult Index()
-        {
-            return View();
-        }
+		{
+			return View();
+		}
 
 		[HttpGet]
 		public IActionResult Get(string name)
@@ -58,8 +59,8 @@ namespace MenuList.Controllers
 			product.Image = randomImageName;
 
 			pm.TAdd(product);
-			return RedirectToAction("Admin");
-		}
+            return Json(new { IsSuccess = "true" });
+        }
 
 		[HttpDelete]
 		public IActionResult Delete(int id)
@@ -76,28 +77,28 @@ namespace MenuList.Controllers
 		[HttpPost]
 		public IActionResult Update(Product product, IFormFile file)
 		{
-            var value = pm.TGetById(product.ProductId);
+			var value = pm.TGetById(product.ProductId);
 			value.ProductName = product.ProductName;
 			value.Description = product.Description;
 			value.Price = product.Price;
-            if (file != null)
-            {
-                var root = _fileProvider.GetDirectoryContents("wwwroot");
-                var images = root.First(x => x.Name == "img");
+			if (file != null)
+			{
+				var root = _fileProvider.GetDirectoryContents("wwwroot");
+				var images = root.First(x => x.Name == "img");
 
-                var delete_path = Path.Combine(images.PhysicalPath, value.Image);
-                System.IO.File.Delete(delete_path);
+				var delete_path = Path.Combine(images.PhysicalPath, value.Image);
+				System.IO.File.Delete(delete_path);
 
-                var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-                var path = Path.Combine(images.PhysicalPath, randomImageName);
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-                value.Image = randomImageName;
-            }
-            pm.TUpdate(value);
-            return RedirectToAction("Admin");
+				var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+				var path = Path.Combine(images.PhysicalPath, randomImageName);
+				using (var stream = new FileStream(path, FileMode.Create))
+				{
+					file.CopyTo(stream);
+				}
+				value.Image = randomImageName;
+			}
+			pm.TUpdate(value);
+            return Json(new { IsSuccess = "true" });
         }
-	}
+    }
 }

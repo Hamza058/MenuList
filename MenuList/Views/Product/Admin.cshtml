@@ -18,17 +18,17 @@
                     $("#values").html("");
                     $.each(data, function (index, item) {
                         let product = `
-                                                        <tr>
-                                                            <td>${index}</td>
-                                                            <td>${item.productName}</td>
-                                                            <td>${item.description}</td>
-                                                            <td>${item.price}</td>
-                                                            <td>${item.categories.categoryName}
-                                                            <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
-                                                            <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
-                                                            <td><i onclick="getProduct(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
-                                                        </tr>
-                                                    `;
+                                    <tr>
+                                        <td>${index}</td>
+                                        <td>${item.productName}</td>
+                                        <td>${item.description}</td>
+                                        <td>${item.price}</td>
+                                        <td>${item.categories.categoryName}
+                                        <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
+                                        <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
+                                        <td><i onclick="getProduct(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
+                                    </tr>
+                                `;
                         $("#values").append(product);
                     });
                     $("#loading").hide();
@@ -38,28 +38,32 @@
                 }
             })
         }
+
         function getProduct(id) {
             $.ajax({
                 type: "Get",
                 url: `/Product/GetById/`,
                 data: { id: id },
                 success: function (data) {
-                    $("#modalValues").html("");
-                    let product = `
-                                <input type="hidden" name="ProductId"  value="${data.productId}" />
-                                <input name="ProductName" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
-                                <input name="Description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
-                                <input name="Price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
-                                <input type="file" name="file" class="form-control" />
-                                            `;
-                    $("#modalValues").append(product);
+                    $("#modalBody").html("");
+                    let body = `
+                                <input type="hidden" id="method"  value="Update" />
+                                <input type="hidden" id="id"  value="${data.productId}" />
+                                <input id="name" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
+                                <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
+                                <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
+                                <input type="file" id="file" class="form-control" />
+                            `;
+                    $("#modalBody").append(body);
                 },
                 error: function (e) {
                     console.log(e);
                 }
             })
         }
+
         loadProducts();
+
         function Delete(id) {
             $.ajax({
                 type: "Delete",
@@ -73,6 +77,54 @@
                 }
             })
         }
+
+        function clearModal() {
+            $("#modalBody").html("");
+            let body = `
+                    <input type="hidden" id="method" value="Add" />
+                    <input id="name" class="form-control mb-2" placeholder="Ürün adı" required />
+                    <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" required />
+                    <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" required />
+                    <input type="file" id="file" class="form-control" />
+            `;
+
+            $("#modalBody").append(body);
+        }
+
+        $(document).ready(function () {
+            $("#uploadButton").click(function () {
+                var method = $("#method").val();
+                var id = $("#id").val();
+                var name = $("#name").val();
+                var des = $("#description").val();
+                var pr = $("#price").val();
+                var fileInput = document.getElementById("file");
+                var file = fileInput.files[0];
+
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("ProductId", id);
+                formData.append("ProductName", name);
+                formData.append("Description", des);
+                formData.append("Price", pr);
+
+
+                $.ajax({
+                    url: `/Product/${method}`,
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (response) {
+                        console.log(response);
+                        loadProducts();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
     </script>
 }
 
@@ -105,41 +157,20 @@
     </div>
 </div>
 
-<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#addProduct">Ürün Ekle</button>
-<div class="modal" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Ürün Bilgileri</h1>
-            </div>
-            <form asp-action="Add" enctype="multipart/form-data" method="post">
-                <div class="modal-body">
-                    <input asp-for="ProductName" class="form-control mb-2" placeholder="Ürün adı" required />
-                    <input asp-for="Description" class="form-control mb-2" placeholder="Ürün açıklaması" required />
-                    <input asp-for="Price" class="form-control mb-2" placeholder="Ürün fiyatı" required />
-                    <input type="file" name="file" class="form-control" accept="image/*" required />
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#updateProduct" onclick="clearModal()">Ürün Ekle</button>
 
-<div class="modal" id="updateProduct" tabindex="-1" aria-labelledby="updateProductLabel" aria-hidden="true">
+<div class="modal fade" id="updateProduct" tabindex="-1" aria-labelledby="updateProductLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Ürün Bilgileri</h1>
             </div>
-            <form asp-action="Update" asp-route-id="id" enctype="multipart/form-data" method="post">
-                <div id="modalValues" class="modal-body">
+            <form id="productForm" enctype="multipart/form-data">
+                <div id="modalBody" class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-success" id="uploadButton" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
                 </div>
             </form>
         </div>
