@@ -74,10 +74,9 @@ namespace MenuList.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Update(Product product, IFormFile file, int id)
+		public IActionResult Update(Product product, IFormFile file)
 		{
-
-            var value = pm.TGetById(id);
+            var value = pm.TGetById(product.ProductId);
 			value.ProductName = product.ProductName;
 			value.Description = product.Description;
 			value.Price = product.Price;

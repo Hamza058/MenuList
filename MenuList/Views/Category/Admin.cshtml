@@ -69,18 +69,18 @@
 				url: `/Category/GetById/`,
 				data: { id: id },
 				success: function (data) {
-					$("#modalBodyValues").html("");
-					$("#modalFooterValues").html("");
-					let category = `
+					$("#modalBody").html("");
+					$("#modalFooter").html("");
+					let body = `
 									<input type="hidden" id="id"  value="${data.categoryId}" />
 									<input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
 					`;
-					let foot = `
+					let footer = `
 						<button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Update()">Kaydet</button>
 						<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
 					`;
-					$("#modalBodyValues").append(category);
-					$("#modalFooterValues").append(foot);
+					$("#modalBody").append(body);
+					$("#modalFooter").append(footer);
 				},
 				error: function (e) {
 					console.log(e);
@@ -107,17 +107,17 @@
 			})
 		}
 		function clearModal(){
-			$("#modalBodyValues").html("");
-			$("#modalFooterValues").html("");
-			let category = `
+			$("#modalBody").html("");
+			$("#modalFooter").html("");
+			let body = `
 					<input type="text" id="categoryName" class="form-control mb-2" placeholder="Kategori adı" />
 			`;
-			let foot = `
+			let footer = `
 					<button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Add()">Kaydet</button>
 					<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
 			`;
-			$("#modalBodyValues").append(category);
-			$("#modalFooterValues").append(foot);
+			$("#modalBody").append(body);
+			$("#modalFooter").append(footer);
 		}
 	</script>
 }
@@ -149,10 +149,10 @@
 				<h1 class="modal-title fs-5">Kategori Bilgileri</h1>
 			</div>
 			<div>
-				<div id="modalBodyValues" class="modal-body">
+				<div id="modalBody" class="modal-body">
 				</div>
 			</div>
-			<div id="modalFooterValues" class="modal-footer">
+			<div id="modalFooter" class="modal-footer">
 			</div>
 		</div>
 	</div>
