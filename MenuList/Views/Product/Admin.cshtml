@@ -26,7 +26,7 @@
                                             <td>${item.categories.categoryName}
                                             <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
                                             <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
-                                            <td><i onclick="getProducts(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
+                                            <td><i onclick="getProduct(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
                                         </tr>
                                     `;
                         $("#values").append(product);
@@ -38,20 +38,21 @@
                 }
             })
         }
-        function getProducts(id) {
+        function getProduct(id) {
             $.ajax({
                 type: "Get",
                 url: `/Product/GetById/`,
                 data: { id: id },
                 success: function (data) {
-                        let product = `
-                                    <input type="hidden" name="id"  value="${data.productId}" />
-                                    <input name="ProductName" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
-                                    <input name="Description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
-                                    <input name="Price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
-                                    <input type="file" name="file" class="form-control" />
-                                `;
-                        $("#modalValues").append(product);
+                    $("#modalValues").html("");
+                    let product = `
+                                <input type="hidden" name="id"  value="${data.productId}" />
+                                <input name="ProductName" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
+                                <input name="Description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
+                                <input name="Price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
+                                <input type="file" name="file" class="form-control" />
+                            `;
+                    $("#modalValues").append(product);
                 },
                 error: function (e) {
                     console.log(e);
