@@ -18,17 +18,17 @@
                     $("#values").html("");
                     $.each(data, function (index, item) {
                         let product = `
-                                    <tr>
-                                        <td>${index}</td>
-                                        <td>${item.productName}</td>
-                                        <td>${item.description}</td>
-                                        <td>${item.price}</td>
-                                        <td>${item.categories.categoryName}
-                                        <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
-                                        <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
-                                        <td><i onclick="getProduct(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
-                                    </tr>
-                                `;
+                                            <tr>
+                                                <td>${index}</td>
+                                                <td>${item.productName}</td>
+                                                <td>${item.description}</td>
+                                                <td>${item.price}</td>
+                                                <td>${item.categories.categoryName}
+                                                <td><img src="/img/${item.image}" class="img-width border border-dark m-2" /></td>
+                                                <td><i onclick="Delete(${item.productId})" type="button" class="bx bx-trash" /></td>
+                                                <td><i onclick="getProduct(${item.productId})" data-bs-toggle="modal" data-bs-target="#updateProduct" type="button" class="bx bxs-edit" /></td>
+                                            </tr>
+                                        `;
                         $("#values").append(product);
                     });
                     $("#loading").hide();
@@ -45,15 +45,16 @@
                 url: `/Product/GetById/`,
                 data: { id: id },
                 success: function (data) {
+                    console.log(data);
                     $("#modalBody").html("");
                     let body = `
-                                <input type="hidden" id="method"  value="Update" />
-                                <input type="hidden" id="id"  value="${data.productId}" />
-                                <input id="name" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
-                                <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
-                                <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
-                                <input type="file" id="file" class="form-control" />
-                            `;
+                                        <input type="hidden" id="method"  value="Update" />
+                                        <input type="hidden" id="id"  value="${data.productId}" />
+                                        <input id="name" class="form-control mb-2" placeholder="Ürün adı" value="${data.productName}" required />
+                                        <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" value="${data.description}" required />
+                                        <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" value="${data.price}" required />
+                                        <input type="file" id="file" class="form-control" />
+                                    `;
                     $("#modalBody").append(body);
                 },
                 error: function (e) {
@@ -81,14 +82,29 @@
         function clearModal() {
             $("#modalBody").html("");
             let body = `
-                    <input type="hidden" id="method" value="Add" />
-                    <input id="name" class="form-control mb-2" placeholder="Ürün adı" required />
-                    <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" required />
-                    <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" required />
-                    <input type="file" id="file" class="form-control" />
-            `;
-
+                        <input type="hidden" id="method" value="Add" />
+                        <input id="name" class="form-control mb-2" placeholder="Ürün adı" required />
+                        <input id="description" class="form-control mb-2" placeholder="Ürün açıklaması" required />
+                        <input id="price" class="form-control mb-2" placeholder="Ürün fiyatı" required />
+                        <select id="category" class="form-select mb-2"></select>
+                        <input type="file" id="file" class="form-control" />
+                `;
             $("#modalBody").append(body);
+            $.ajax({
+                type: "Get",
+                url: `/Category/Get/`,
+                success: function (data) {
+                    $.each(data, function (index, item) {
+                        let categories = `
+                                <option value="${item.categoryId}">${item.categoryName}</option>
+                            `;
+                        $("#category").append(categories);
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
         }
 
         $(document).ready(function () {
@@ -98,6 +114,7 @@
                 var name = $("#name").val();
                 var des = $("#description").val();
                 var pr = $("#price").val();
+                var ct = $("#category").val();
                 var fileInput = document.getElementById("file");
                 var file = fileInput.files[0];
 
@@ -107,6 +124,7 @@
                 formData.append("ProductName", name);
                 formData.append("Description", des);
                 formData.append("Price", pr);
+                formData.append("CategoryId", ct);
 
 
                 $.ajax({

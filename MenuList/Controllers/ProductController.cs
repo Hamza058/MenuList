@@ -28,7 +28,7 @@ namespace MenuList.Controllers
 		{
 			if (name == null)
 				name = "";
-			var products = pm.TGetCategory().Where(x => x.ProductName.ToLower().Contains(name.ToLower())).ToList();
+			var products = pm.TGetList().Where(x => x.ProductName.ToLower().Contains(name.ToLower())).ToList();
 			return Json(products);
 		}
 
@@ -55,7 +55,6 @@ namespace MenuList.Controllers
 			{
 				file.CopyTo(stream);
 			}
-			product.CategoryId = 1;
 			product.Image = randomImageName;
 
 			pm.TAdd(product);
