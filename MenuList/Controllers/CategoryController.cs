@@ -13,8 +13,12 @@ namespace MenuList.Controllers
 		{
 			return View();
 		}
-
-		[HttpGet]
+        [HttpGet]
+        public IActionResult Gett()
+        {
+            return Json(cm.TGetList());
+        }
+        [HttpGet]
 		public IActionResult Get()
 		{
 			return Json(cm.TGetList());
