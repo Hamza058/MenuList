@@ -12,7 +12,7 @@ namespace DataAccessLayer.Concrete
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=localhost;port=3306;uid=dbmenu;pwd=46x3Qxm52;database=DbMenu;");//optionsBuilder.UseMySQL("server=localhost;port=3306;user=menu;password=Tc71pa0945;database=DbMenu;");
+            optionsBuilder.UseMySQL("server=localhost;port=3306;user=menu;password=Tc71pa0945;database=DbMenu;");
         }
 
         public DbSet<Category> Categories { get; set; }
