@@ -29,7 +29,7 @@ namespace MenuList.Controllers
             
             if (value != null)
             {
-                return RedirectToAction("Register");
+                return RedirectToAction("Admin", "Category");
             }
             else
             {

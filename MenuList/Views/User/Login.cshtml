@@ -12,7 +12,7 @@
 <h1>Login</h1>
 
 <form asp-controller="User" asp-action="Login" method="post">
-    <input asp-for="UserName" placeholder="Adınız" />
-    <input type="password" asp-for="Password" placeholder="Parolanız" />
-    <input type="submit" value="Giriş Yap" />
+    <input asp-for="UserName" class="form-control mb-2" placeholder="Adınız" />
+    <input type="password" class="form-control mb-2" asp-for="Password" placeholder="Parolanız" />
+    <input type="submit" class="btn btn-primary" value="Giriş Yap" />
 </form>
