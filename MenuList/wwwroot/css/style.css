@@ -7,8 +7,6 @@
 }
 .items {
     font-family: cursive;
-    display: inline-block;
-    word-wrap: break-word;
 }
 .akerdion {
     margin: 2px;
@@ -22,7 +20,5 @@
 
     .items {
         font-size: 15px !important;
-        display: inline-block;
-        word-wrap: break-word;
     }
 }

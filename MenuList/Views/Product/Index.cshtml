@@ -15,30 +15,32 @@
             $("#loading").show();
             $.ajax({
                 type: "Get",
-                url: "/Category/Gett/",
+                url: "/Category/GetWithProduct/",
                 data: { name: "" },
                 success: function (data) {
                     $.each(data, function (index, item) {
                         let category = `
-                                <div class="col dropdown">
-                                    <details id="${item.categoryId}" class="akerdion border-bottom">
-                                         <summary class="ozet text-center">${item.categoryName}</summary>
-                                    </details>
-                                </div>
-                                `;
+                                        <div class="col dropdown">
+                                            <details id="${item.categoryId}" class="akerdion border-bottom">
+                                                    <summary class="ozet text-center">${item.categoryName}</summary>
+                                            </details>
+                                        </div>
+                                    `;
                         $("#categories").append(category);
                         $.each(item.products, function (index, item) {
                             console.log(item);
-                            let products =`
-                                        <a class="dropdown-item ps-2">
-                                                <div class="row-cols-fluid-4 text-center mb-1 items">
-                                                <img src="/img/${item.image}" class="border border-dark m-2" width="60%" />
-                                                <div class="col-lg-12 border-bottom border-dark pb-2"><h4>${item.productName}</h4></div>
-                                                <div class="col-lg-12 text-start text-start pt-1 ps-1 pe-1">${item.description}</div>
-                                                <div class="col-lg-12 text-end pe-2">${item.price}</div>
+                            let products = `
+                                    <div class="container" style="word-wrap: break-word">
+                                        <div class="row-cols-fluid-4 text-center mb-1 items">
+                                            <div class="col-lg-12">
+                                                <img src="/img/${item.image}" class="border border-dark m-2" width="80%" />
                                             </div>
-                                        </a>
-                        `;
+                                            <div class="col-lg-12 border-bottom border-dark pb-2"><h4>${item.productName}</h4></div>
+                                            <div class="col-lg-12 text-start text-start pt-1 ps-1 pe-1">${item.description}</div>
+                                            <div class="col-lg-12 text-end pe-2">${item.price}</div>
+                                        </div>
+                                    </div>
+                                        `;
                             $(`#${item.categoryId}`).append(products);
                         });
                     });

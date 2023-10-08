@@ -14,7 +14,7 @@ namespace MenuList.Controllers
 			return View();
 		}
         [HttpGet]
-        public IActionResult Gett()
+        public IActionResult GetWithProduct()
         {
             return Json(cm.TGetList());
         }
