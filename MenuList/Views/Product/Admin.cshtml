@@ -68,7 +68,7 @@
         function Delete(id) {
             $.ajax({
                 type: "Delete",
-                url: "/Product/Delete",
+                url: `/Product/Delete`,
                 data: { id: id },
                 success: function (data) {
                     loadProducts();
@@ -148,15 +148,15 @@
 
 <h1>Ürünler</h1>
 
-<div class="search mb-2">
+<div class="search mb-4">
     <input id="search" type="text" placeholder="Arama..." />
     <i onclick="loadProducts()" type="button" class="bx bx-search"></i>
 </div>
 
-<table class="table table-primary text-center">
-    <thead>
+<table class="table table-striped text-center">
+    <thead class="table-warning">
         <tr>
-            <th>Id</th>
+            <th>#</th>
             <th>Ürün Ad</th>
             <th>Ürün Açıklama</th>
             <th>Ürün Fiyatı</th>
