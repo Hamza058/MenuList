@@ -2,6 +2,12 @@
     background-color: #1f2029;
     color: #fff;
 }
+summary {
+    color: #FFCC99;
+}
+.borders {
+    border-bottom: 3px solid #FFCC99;
+}
 .ozet {
     font-family: 'Lucida Handwriting';
     cursor: pointer;
