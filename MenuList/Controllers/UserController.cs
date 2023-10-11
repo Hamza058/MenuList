@@ -2,14 +2,24 @@
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 using System;
+using MenuList.Authenticate;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MenuList.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IConfiguration _configuration;
+
         UserManager um = new UserManager(new EFUserDal());
+
+        public UserController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public IActionResult Admin()
         {
@@ -29,6 +39,7 @@ namespace MenuList.Controllers
             
             if (value != null)
             {
+                var token = Created("", new CreateToken(_configuration).Token(value));
                 return RedirectToAction("Admin", "Category");
             }
             else
