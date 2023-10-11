@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MenuList.Controllers
@@ -9,16 +10,8 @@ namespace MenuList.Controllers
 	{
 		CategoryManager cm = new CategoryManager(new EFCategoryDal());
 
-		public IActionResult Index()
-		{
-			return View();
-		}
         [HttpGet]
-        public IActionResult GetWithProduct()
-        {
-            return Json(cm.TGetList());
-        }
-        [HttpGet]
+		[AllowAnonymous]
 		public IActionResult Get()
 		{
 			return Json(cm.TGetList());

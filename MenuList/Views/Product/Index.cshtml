@@ -15,7 +15,7 @@
             $("#loading").show();
             $.ajax({
                 type: "Get",
-                url: "/Category/GetWithProduct/",
+                url: "/Category/Get/",
                 data: { name: "" },
                 success: function (data) {
                     $.each(data, function (index, item) {

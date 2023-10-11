@@ -2,6 +2,7 @@
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using System.Runtime.InteropServices;
@@ -18,6 +19,7 @@ namespace MenuList.Controllers
 			_fileProvider = fileProvider;
 		}
 
+		[AllowAnonymous]
 		public IActionResult Index()
 		{
 			return View();

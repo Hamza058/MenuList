@@ -1,4 +1,7 @@
-﻿
+﻿body {
+    background-color: #1f2029;
+    color: #fff;
+}
 .ozet {
     font-family: 'Lucida Handwriting';
     cursor: pointer;
