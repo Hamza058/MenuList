@@ -67,8 +67,8 @@
 
         function Delete(id) {
             $.ajax({
-                type: "Delete",
-                url: `/Product/Delete`,
+                type: "POST",
+                url: `/Product/Delete/`,
                 data: { id: id },
                 success: function (data) {
                     loadProducts();

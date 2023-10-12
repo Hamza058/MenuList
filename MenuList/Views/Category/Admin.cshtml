@@ -52,8 +52,8 @@
 		}
 		function Delete(id) {
 			$.ajax({
-				type: "Delete",
-				url: "/Category/Delete",
+				type: "POST",
+				url: "/Category/Delete/",
 				data: { id: id },
 				success: function (data) {
 					loadCategories();
@@ -141,7 +141,7 @@
 	</div>
 </div>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCategory" onclick="clearModal()">Ürün Ekle</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCategory" onclick="clearModal()">Kategori Ekle</button>
 <div class="modal fade" id="modalCategory" tabindex="-1" aria-labelledby="modalCategoryLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">

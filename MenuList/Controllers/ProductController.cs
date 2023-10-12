@@ -63,7 +63,7 @@ namespace MenuList.Controllers
             return Json(new { IsSuccess = "true" });
         }
 
-		[HttpDelete]
+		[HttpPost]
 		public IActionResult Delete(int id)
 		{
 			var product = pm.TGetById(id);

@@ -29,7 +29,7 @@ namespace MenuList.Controllers
 			return Json(new { IsSuccess = "true" });
 		}
 
-		[HttpDelete]
+		[HttpPost]
 		public IActionResult Delete(int id)
 		{
 			cm.TDelete(cm.TGetById(id));
