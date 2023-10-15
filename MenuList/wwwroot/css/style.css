@@ -13,6 +13,9 @@ summary {
     cursor: pointer;
     margin: -1%;
     padding: 8px 10px;
+    /*background-image: url("../img/images.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;*/
 }
 .items {
     font-family: cursive;
