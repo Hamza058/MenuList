@@ -1,5 +1,13 @@
-﻿body {
-    background-color: #1f2029;
+﻿html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-image: linear-gradient(to bottom, #DCDCDC, #1f2029);
     color: #fff;
 }
 summary {
@@ -13,9 +21,10 @@ summary {
     cursor: pointer;
     margin: -1%;
     padding: 8px 10px;
-    /*background-image: url("../img/images.jpeg");
+    /*background-image: url("../img/muhallebi.png");
     background-repeat: no-repeat;
-    background-size: 100% 100%;*/
+    background-size: 100% 100%;
+    border-radius: 30px;*/
 }
 .items {
     font-family: cursive;
