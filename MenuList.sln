@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityLayer", "EntityLayer\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{D6772616-6BB4-451B-B4DC-2FA57F14303C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{5C754497-6908-4F91-8534-B0F582388230}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{5C754497-6908-4F91-8534-B0F582388230}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthAPI", "AuthAPI\AuthAPI.csproj", "{BE065CD3-A367-42E6-8E2D-03F55A665670}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5C754497-6908-4F91-8534-B0F582388230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C754497-6908-4F91-8534-B0F582388230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C754497-6908-4F91-8534-B0F582388230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE065CD3-A367-42E6-8E2D-03F55A665670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE065CD3-A367-42E6-8E2D-03F55A665670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE065CD3-A367-42E6-8E2D-03F55A665670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE065CD3-A367-42E6-8E2D-03F55A665670}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
