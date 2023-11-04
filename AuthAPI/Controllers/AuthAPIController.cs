@@ -7,7 +7,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace AuthAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthAPIController : ControllerBase
     {
