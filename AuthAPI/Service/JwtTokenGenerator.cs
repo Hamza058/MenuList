@@ -22,8 +22,7 @@ namespace AuthAPI.Service
 
             List<Claim> claimList = new List<Claim> {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, "Admin"),
-                new Claim(ClaimTypes.Role, "User"),
+                new Claim(JwtRegisteredClaimNames.Sub, Convert.ToString(user.UserId))
             };
 
             var tokenDescrition = new SecurityTokenDescriptor

@@ -5,6 +5,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using static MenuList.Utility.SD;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace MenuList.Service
 {
@@ -74,7 +75,15 @@ namespace MenuList.Service
                         return new() { IsSuccess = false, Message = "Internal Server Error" };
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                        var apiResponseDto = JsonConvert.DeserializeObject<Response>(apiContent);
+                        JObject inputObject = JObject.Parse(apiContent);
+
+                        // Create a new JObject with "result" property
+                        JObject resultObject = new JObject();
+                        resultObject["result"] = inputObject;
+
+                        // Convert the result JObject to a JSON string
+                        string resultJson = resultObject.ToString(Formatting.None);
+                        var apiResponseDto = JsonConvert.DeserializeObject<Response>(resultJson);
                         return apiResponseDto;
                 }
             }
