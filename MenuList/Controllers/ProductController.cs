@@ -49,8 +49,8 @@ namespace MenuList.Controllers
 		[HttpPost]
 		public IActionResult Add(Product product, IFormFile file)
 		{
-			var root = _fileProvider.GetDirectoryContents("wwwroot");
-			var images = root.First(x => x.Name == "img");
+			var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+			var images = root.First(x => x.Name == "Product");
 			var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
 			var path = Path.Combine(images.PhysicalPath, randomImageName);
 			using (var stream = new FileStream(path, FileMode.Create))
@@ -67,8 +67,8 @@ namespace MenuList.Controllers
 		public IActionResult Delete(int id)
 		{
 			var product = pm.TGetById(id);
-			var root = _fileProvider.GetDirectoryContents("wwwroot");
-			var images = root.First(x => x.Name == "img");
+			var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+			var images = root.First(x => x.Name == "Product");
 			var path = Path.Combine(images.PhysicalPath, product.Image);
 			System.IO.File.Delete(path);
 			pm.TDelete(product);
@@ -84,8 +84,8 @@ namespace MenuList.Controllers
 			value.Price = product.Price;
 			if (file != null)
 			{
-				var root = _fileProvider.GetDirectoryContents("wwwroot");
-				var images = root.First(x => x.Name == "img");
+				var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+				var images = root.First(x => x.Name == "Product");
 
 				var delete_path = Path.Combine(images.PhysicalPath, value.Image);
 				System.IO.File.Delete(delete_path);

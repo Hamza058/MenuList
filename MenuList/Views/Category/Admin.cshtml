@@ -1,159 +1,183 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Admin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section Scripts{
-	<script type="text/javascript">
-		function loadCategories() {
-			$("#loading").show();
-			$.ajax({
-				type: "Get",
-				url: "/Category/Get",
-				success: function (data) {
-					$("#values").html("");
-					$.each(data, function (index, item) {
-						let comment = `
-											<tr>
-												<td>${index}</td>
-												<td>${item.categoryName}</td>
-												<td><i onclick="Delete(${item.categoryId})" type="button" class="bx bx-trash" /></td>
-												<td><i onclick="getCategory(${item.categoryId})" data-bs-toggle="modal" data-bs-target="#modalCategory" type="button" type="button" class="bx bxs-edit" /></td>
-											</tr>
-										`;
-						$("#values").append(comment);
-					});
-					$("#loading").hide();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		loadCategories();
-		function Add() {
-			var name = $("#categoryName").val();
+@section Scripts {
+    <script type="text/javascript">
+        function loadCategories() {
+            $("#loading").show();
+            $.ajax({
+                type: "Get",
+                url: "/Category/Get",
+                success: function (data) {
+                    $("#values").html("");
+                    $.each(data, function (index, item) {
+                        let comment = `
+                                        <tr>
+                                            <td>${index+1}</td>
+                                            <td>${item.categoryName}</td>
+                                                    <td><img src="/Images/Category/${item.categoryImage}"></td>
+                                            <td style="width: 60px">
+                                                <i onclick="Delete(${item.categoryId})" type="button" class="bx bx-trash" />
+                                            </td>
+                                            <td style="width: 60px">
+                                                <i onclick="getCategory(${item.categoryId})" data-bs-toggle="modal" data-bs-target="#modalCategory" type="button" type="button" class="bx bxs-edit" />
+                                            </td>
+                                        </tr>
+                        `;
+                        $("#values").append(comment);
+                    });
+                    $("#loading").hide();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        
+        loadCategories();
 
-			var jsonData = { "categoryName": name };
+        function Add() {
+            var name = $("#categoryName").val();
+            var fileInput = document.getElementById("file");
+            var file = fileInput.files[0];
 
-			$.ajax({
-				type: "POST",
-				url: "/Category/Add",
-				data: jsonData,
-				success: function (data) {
-					console.log("Eklendi");
-					loadCategories();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		function Delete(id) {
-			$.ajax({
-				type: "POST",
-				url: "/Category/Delete/",
-				data: { id: id },
-				success: function (data) {
-					loadCategories();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		function getCategory(id) {
-			$.ajax({
-				type: "Get",
-				url: `/Category/GetById/`,
-				data: { id: id },
-				success: function (data) {
-					$("#modalBody").html("");
-					$("#modalFooter").html("");
-					let body = `
-									<input type="hidden" id="id"  value="${data.categoryId}" />
-									<input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
-					`;
-					let footer = `
-						<button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Update()">Kaydet</button>
-						<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-					`;
-					$("#modalBody").append(body);
-					$("#modalFooter").append(footer);
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		function Update() {
-			var name = $("#categoryName").val();
-			var id = $("#id").val();
+            var formData = new FormData();
+            formData.append("categoryName", name);
+            formData.append("file", file);
 
-			var jsonData = { "categoryId": id, "categoryName": name };
+            $.ajax({
+                type: "POST",
+                url: "/Category/Add",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    console.log("Eklendi");
+                    loadCategories();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        function Delete(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Category/Delete/",
+                data: { id: id },
+                success: function (data) {
+                    loadCategories();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        function getCategory(id) {
+            $.ajax({
+                type: "Get",
+                url: `/Category/GetById/`,
+                data: { id: id },
+                success: function (data) {
+                    $("#modalBody").html("");
+                    $("#modalFooter").html("");
+                    let body = `
+                                <input type="hidden" id="id"  value="${data.categoryId}" />
+                                <input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
+                                <input type="file" id="file" class="form-control" />
+                    `;
+                    let footer = `
+                                <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Update()">Kaydet</button>
+                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    `;
+                    $("#modalBody").append(body);
+                    $("#modalFooter").append(footer);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        function Update() {
+            var name = $("#categoryName").val();
+            var id = $("#id").val();
+            var fileInput = document.getElementById("file");
+            var file = fileInput.files[0];
 
-			$.ajax({
-				type: "POST",
-				url: "/Category/Update",
-				data: jsonData,
-				success: function (data) {
-					console.log("Güncellendi");
-					loadCategories();
-				},
-				error: function (e) {
-					console.log(e);
-				}
-			})
-		}
-		function clearModal(){
-			$("#modalBody").html("");
-			$("#modalFooter").html("");
-			let body = `
-					<input type="text" id="categoryName" class="form-control mb-2" placeholder="Kategori adı" />
-			`;
-			let footer = `
-					<button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Add()">Kaydet</button>
-					<button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-			`;
-			$("#modalBody").append(body);
-			$("#modalFooter").append(footer);
-		}
-	</script>
+            var formData = new FormData();
+            formData.append("categoryId", id);
+            formData.append("categoryName", name);
+            formData.append("file", file);
+
+            $.ajax({
+                type: "POST",
+                url: "/Category/Update",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    console.log("Güncellendi");
+                    loadCategories();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+        function clearModal() {
+            $("#modalBody").html("");
+            $("#modalFooter").html("");
+            let body = `
+                        <input type="text" id="categoryName" class="form-control mb-2" placeholder="Kategori adı" />
+                        <input type="file" id="file" class="form-control" />
+            `;
+            let footer = `
+                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Add()">Kaydet</button>
+                            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            `;
+            $("#modalBody").append(body);
+            $("#modalFooter").append(footer);
+        }
+    </script>
 }
 
 <h1>Kategoriler</h1>
 <table class="table table-striped text-center">
-	<thead class="table-warning">
-		<tr>
-			<th>#</th>
-			<th>Kategori</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody id="values">
-	</tbody>
+    <thead class="table-warning">
+        <tr>
+            <th>#</th>
+            <th>Kategori</th>
+            <th>Logo</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="values">
+    </tbody>
 </table>
 <div id="loading" class="text-center">
-	<div class="spinner-border" role="status">
-		<span class="sr-only"></span>
-	</div>
+    <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+    </div>
 </div>
 
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCategory" onclick="clearModal()">Kategori Ekle</button>
 <div class="modal fade" id="modalCategory" tabindex="-1" aria-labelledby="modalCategoryLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5">Kategori Bilgileri</h1>
-			</div>
-			<div>
-				<div id="modalBody" class="modal-body">
-				</div>
-			</div>
-			<div id="modalFooter" class="modal-footer">
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Kategori Bilgileri</h1>
+            </div>
+            <div>
+                <form enctype="multipart/form-data">
+                    <div id="modalBody" class="modal-body">
+                    </div>
+                </form>
+            </div>
+            <div id="modalFooter" class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
