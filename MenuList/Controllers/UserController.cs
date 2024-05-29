@@ -80,5 +80,18 @@ namespace MenuList.Controllers
             }
             return RedirectToAction("Update");
         }
+
+        public IActionResult ExitUser()
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("UserName");
+
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+
+            return RedirectToAction("Index", "Product");
+        }
     }
 }
