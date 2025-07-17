@@ -13,18 +13,19 @@
                 success: function (data) {
                     $("#values").html("");
                     $.each(data, function (index, item) {
-                        let comment = `
-                                        <tr>
-                                            <td>${index+1}</td>
-                                            <td>${item.categoryName}</td>
-                                                    <td><img src="/Images/Category/${item.categoryImage}"></td>
-                                            <td style="width: 60px">
-                                                <i onclick="Delete(${item.categoryId})" type="button" class="bx bx-trash" />
-                                            </td>
-                                            <td style="width: 60px">
-                                                <i onclick="getCategory(${item.categoryId})" data-bs-toggle="modal" data-bs-target="#modalCategory" type="button" type="button" class="bx bxs-edit" />
-                                            </td>
-                                        </tr>
+                        let comment = 
+                        `
+                            <tr>
+                                <td>${index+1}</td>
+                                <td>${item.categoryName}</td>
+                                    <td><img src="/Images/Category/${item.categoryImage}"></td>
+                                <td style="width: 60px">
+                                    <i onclick="Delete(${item.categoryId})" type="button" class="bx bx-trash" />
+                                </td>
+                                <td style="width: 60px">
+                                    <i onclick="getCategory(${item.categoryId})" data-bs-toggle="modal" data-bs-target="#modalCategory" type="button" type="button" class="bx bxs-edit" />
+                                </td>
+                            </tr>
                         `;
                         $("#values").append(comment);
                     });
@@ -83,14 +84,16 @@
                 success: function (data) {
                     $("#modalBody").html("");
                     $("#modalFooter").html("");
-                    let body = `
-                                <input type="hidden" id="id"  value="${data.categoryId}" />
-                                <input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
-                                <input type="file" id="file" class="form-control" />
+                    let body = 
+                    `
+                        <input type="hidden" id="id"  value="${data.categoryId}" />
+                        <input type="text" id="categoryName" class="form-control mb-2" value="${data.categoryName}"  placeholder="Ürün adı" required />
+                        <input type="file" id="file" class="form-control" />
                     `;
-                    let footer = `
-                                <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Update()">Kaydet</button>
-                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    let footer = 
+                    `
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Update()">Kaydet</button>
+                        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
                     `;
                     $("#modalBody").append(body);
                     $("#modalFooter").append(footer);
@@ -129,13 +132,15 @@
         function clearModal() {
             $("#modalBody").html("");
             $("#modalFooter").html("");
-            let body = `
-                        <input type="text" id="categoryName" class="form-control mb-2" placeholder="Kategori adı" />
-                        <input type="file" id="file" class="form-control" />
+            let body = 
+            `
+                <input type="text" id="categoryName" class="form-control mb-2" placeholder="Kategori adı" />
+                <input type="file" id="file" class="form-control" />
             `;
-            let footer = `
-                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Add()">Kaydet</button>
-                            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            let footer = 
+            `
+                <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="Add()">Kaydet</button>
+                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             `;
             $("#modalBody").append(body);
             $("#modalFooter").append(footer);
