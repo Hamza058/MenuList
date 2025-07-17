@@ -1,11 +1,9 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
-using System.Runtime.InteropServices;
 
 namespace MenuList.Controllers
 {
@@ -49,15 +47,22 @@ namespace MenuList.Controllers
 		[HttpPost]
 		public IActionResult Add(Product product, IFormFile file)
 		{
-			var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
-			var images = root.First(x => x.Name == "Product");
-			var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-			var path = Path.Combine(images.PhysicalPath, randomImageName);
-			using (var stream = new FileStream(path, FileMode.Create))
+			if(file != null)
 			{
-				file.CopyTo(stream);
+                var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+                var images = root.First(x => x.Name == "Product");
+                var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                var path = Path.Combine(images.PhysicalPath, randomImageName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                product.Image = randomImageName;
+            }
+			else
+			{
+				product.Image = "product.jpg";
 			}
-			product.Image = randomImageName;
 
 			pm.TAdd(product);
             return Json(new { IsSuccess = "true" });
@@ -67,10 +72,13 @@ namespace MenuList.Controllers
 		public IActionResult Delete(int id)
 		{
 			var product = pm.TGetById(id);
-			var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
-			var images = root.First(x => x.Name == "Product");
-			var path = Path.Combine(images.PhysicalPath, product.Image);
-			System.IO.File.Delete(path);
+			if (product.Image != null)
+			{
+                var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+                var images = root.First(x => x.Name == "Product");
+                var path = Path.Combine(images.PhysicalPath, product.Image);
+                System.IO.File.Delete(path);
+            }
 			pm.TDelete(product);
 			return Json(new { IsSuccess = "true" });
 		}

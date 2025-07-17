@@ -7,9 +7,9 @@ using Microsoft.Extensions.FileProviders;
 
 namespace MenuList.Controllers
 {
-	public class CategoryController : Controller
-	{
-		CategoryManager cm = new CategoryManager(new EFCategoryDal());
+    public class CategoryController : Controller
+    {
+        CategoryManager cm = new CategoryManager(new EFCategoryDal());
         private readonly IFileProvider _fileProvider;
 
         public CategoryController(IFileProvider fileProvider)
@@ -18,53 +18,62 @@ namespace MenuList.Controllers
         }
 
         [HttpGet]
-		[AllowAnonymous]
-		public IActionResult Get()
-		{
-			return Json(cm.TGetList());
-		}
+        [AllowAnonymous]
+        public IActionResult Get()
+        {
+            return Json(cm.TGetList());
+        }
 
-		public IActionResult Admin()
-		{
-			return View();
-		}
+        public IActionResult Admin()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		public IActionResult Add(Category category, IFormFile file)
-		{
-            var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
-            var images = root.First(x => x.Name == "Category");
-            var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var path = Path.Combine(images.PhysicalPath, randomImageName);
-            using (var stream = new FileStream(path, FileMode.Create))
+        [HttpPost]
+        public IActionResult Add(Category category, IFormFile file)
+        {
+            if (file != null)
             {
-                file.CopyTo(stream);
+                var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+                var images = root.First(x => x.Name == "Category");
+                var randomImageName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                var path = Path.Combine(images.PhysicalPath, randomImageName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                category.CategoryImage = randomImageName;
             }
-			category.CategoryImage = randomImageName;
+            else
+            {
+                category.CategoryImage = "category.png";
+            }
 
             cm.TAdd(category);
-			return Json(new { IsSuccess = "true" });
-		}
+            return Json(new { IsSuccess = "true" });
+        }
 
-		[HttpPost]
-		public IActionResult Delete(int id)
-		{
-			var category = cm.TGetById(id);
-
-            var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
-            var images = root.First(x => x.Name == "Category");
-            var path = Path.Combine(images.PhysicalPath, category.CategoryImage);
-            System.IO.File.Delete(path);
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var category = cm.TGetById(id);
+            if (category.CategoryImage != null)
+            {
+                var root = _fileProvider.GetDirectoryContents("wwwroot/Images");
+                var images = root.First(x => x.Name == "Category");
+                var path = Path.Combine(images.PhysicalPath, category.CategoryImage);
+                System.IO.File.Delete(path);
+            }
 
             cm.TDelete(category);
             return Json(new { IsSuccess = "true" });
-		}
+        }
 
-		[HttpPost]
-		public IActionResult Update(Category category, IFormFile file)
-		{
-			var value = cm.TGetById(category.CategoryId);
-			value.CategoryName = category.CategoryName;
+        [HttpPost]
+        public IActionResult Update(Category category, IFormFile file)
+        {
+            var value = cm.TGetById(category.CategoryId);
+            value.CategoryName = category.CategoryName;
 
             if (file != null)
             {
@@ -87,10 +96,10 @@ namespace MenuList.Controllers
             return Json(new { IsSuccess = "true" });
         }
 
-		[HttpGet]
-		public IActionResult GetById(int id)
-		{
-			return Json(cm.TGetById(id));
-		}
-	}
+        [HttpGet]
+        public IActionResult GetById(int id)
+        {
+            return Json(cm.TGetById(id));
+        }
+    }
 }
