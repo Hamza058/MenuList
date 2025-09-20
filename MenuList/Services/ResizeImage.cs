@@ -12,12 +12,12 @@ namespace MenuList.Services
             double ratio = 0.00;
             if (width > height)
             {
+                width = ctgry ? 64 : 300;
                 while (true)
                 {
                     ratio = (double)width / height;
                     if (ctgry)
                     {
-                        width = 64;
                         height = Convert.ToInt32(width / ratio);
                         if (height <= 64)
                         {
@@ -30,7 +30,6 @@ namespace MenuList.Services
                     }
                     else
                     {
-                        width = 300;
                         height = Convert.ToInt32(width / ratio);
                         if (height <= 120)
                         {
@@ -45,12 +44,13 @@ namespace MenuList.Services
             }
             else
             {
+
+                height = ctgry ? 64 : 120;
                 while (true)
                 {
                     ratio = (double)height / width;
                     if (ctgry)
                     {
-                        height = 64;
                         width = Convert.ToInt32(height / ratio);
                         if (width <= 64)
                         {
@@ -63,7 +63,6 @@ namespace MenuList.Services
                     }
                     else
                     {
-                        height = 120;
                         width = Convert.ToInt32(height / ratio);
                         if (width <= 180)
                         {
