@@ -1,2 +1,20 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        // Sadece rakam kontrolü
+        $.validator.addMethod("onlyDigits", function (value, element) {
+            return this.optional(element) || /^[0-9]+$/.test(value);
+        }, "Lütfen sadece rakam giriniz");
+
+        // Kuralı uygulama
+        $("form").validate({
+            rules: {
+                price: { onlyDigits: true }
+            },
+            errorClass: "text-danger"
+        });
+    });
+</script>
