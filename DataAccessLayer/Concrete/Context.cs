@@ -12,6 +12,7 @@ namespace DataAccessLayer.Concrete
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //optionsBuilder.UseMySQL("server=localhost; port=3306; user=ekleristan; password=a4z923Fcs; database=DbEkleristan;");
             optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=238474648asd;database=DbMenuList;");
         }
 

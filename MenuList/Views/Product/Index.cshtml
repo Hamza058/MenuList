@@ -1,7 +1,4 @@
-﻿@using EntityLayer.Concrete
-@model List<Product>
-
-@{
+﻿@{
     Layout = null;
 }
 
@@ -16,7 +13,7 @@
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="col-lg-12 text-center p-3">
+    <div class="col-lg-12 text-center" style="padding: 0 12px;">
         <a asp-controller="Product" asp-action="Admin">
             <img src="~/logo.png" width="45%" />
         </a>
@@ -30,6 +27,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function loadProducts() {
             $("#loading").show();
@@ -50,22 +48,29 @@
                         `;
                         $("#categories").append(category);
                         let $currentCategory = $(`#${item.categoryName}`);
+                        let products = '';
                         $.each(item.products, function (index, productItem) {
-                            let products = 
+                            products += 
                             `
                                 <div class="item">
                                     <div class="col-12">
                                         <img src="/Images/Product/${productItem.image}">
                                     </div>
-                                    <div class="col-12">
-                                        <p class="text-center mt-1 mb-1">${productItem.productName}</p>
-                                        <p class="text-start p-2 mb-0">${productItem.description}</p>
-                                        <p class="float-end pe-4">${productItem.price} TL</p>
+                                    <div class="col-12 text-center">
+                                        <p class="mt-1 mb-1">${productItem.productName}</p>
+                                        <button class="contentBtn" data-text="${productItem.description}">İçindekiler</button>
+                                        <label class="price">${productItem.price} TL</label>
                                     </div>
                                 </div>
                             `;
-                            $(`[data-category-id="${item.categoryId}"]`).append(products);
                         });
+                        let proCont =
+                        `
+                            <div class="item_container">
+                                ${products}
+                            </div>
+                        `;
+                        $(`[data-category-id="${item.categoryId}"]`).append(proCont);
                     });
                     $("#loading").hide();
                 },
@@ -90,6 +95,8 @@
         }
 
         window.onclick = function (event) {
+            if (event.target.closest('.swal2-container')) return;
+
             if (!event.target.matches('.category') && !event.target.closest('.category')) {
                 var dropdowns = document.getElementsByClassName("item");
                 for (var i = 0; i < dropdowns.length; i++) {
@@ -101,6 +108,17 @@
                 }
             }
         };
+
+
+        document.addEventListener("click", function (e) {
+            if (e.target && e.target.classList.contains("contentBtn")) {
+                const msg = e.target.getAttribute("data-text");
+                Swal.fire({
+                    text: msg,
+                    confirmButtonText: 'Tamam'
+                });
+            }
+        });
     </script>
 </body>
 </html>

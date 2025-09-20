@@ -3,7 +3,7 @@
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-image: linear-gradient(to bottom, #DCDCDC, #1f2029);
+    background-image: linear-gradient(to bottom, #fefbea, #96004e);
 }
 
 .container-fluid {
@@ -13,8 +13,8 @@
 }
 
 .category {
-    width: 90%;
-    background-color: rgb(240, 240, 240);
+    width: 98%;
+    background-color: rgb(255, 252, 238);
     border-radius: 40px;
     min-height: 80px;
     margin-bottom: 20px;
@@ -29,8 +29,7 @@
     }
 
     .category:hover {
-        background-color: rgb(237, 109, 97);
-        color: white;
+        background-color: rgb(240, 240, 240);
         font-weight: 600;
     }
 
@@ -45,19 +44,27 @@
     .category img {
         position: absolute;
         right: 5%;
-        top: 10%
+        top: 10%;
+        width: 64px;
+        height: 64px;
     }
 
+.item_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
 .item {
+    position: relative;
     display: none;
     max-height: 0;
     overflow: hidden;
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(250, 250, 250);
     color: black;
-    width: 80%;
+    width: 92%;
     border-radius: 0 0 25px 25px;
     height: auto;
-    border: 1px solid;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 15px auto 15px auto;
     transition: max-height 2s;
 }
@@ -66,4 +73,22 @@
         position: static;
         width: 100%;
         height: 120px;
+    }
+
+    .item .contentBtn {
+        border-radius: 20px;
+        padding: 8px 10px;
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        margin-bottom: 10px;
+    }
+
+    .item label {
+        position: absolute;
+        background-color: rgba(149, 4, 33, 0.8);
+        color: white;
+        top: 0;
+        right: 0;
+        padding: 3px 5px;
+        border-radius: 0 0 0 15px;
     }

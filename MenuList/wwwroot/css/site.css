@@ -66,6 +66,19 @@ div.search::after {
     font-weight:500;
 }
 
+tbody td{
+    vertical-align: middle;
+}
+
+tbody img {
+    width: 64px;
+    height: 64px;
+}
+
+.btn-primary{
+    margin-bottom: 35px;
+}
+
 footer {
     border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
     text-align: center;
