@@ -4,8 +4,6 @@ using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
-using System;
 using System.Security.Claims;
 
 namespace MenuList.Controllers
