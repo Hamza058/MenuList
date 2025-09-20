@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using MenuList.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -11,6 +12,7 @@ namespace MenuList.Controllers
     {
         CategoryManager cm = new CategoryManager(new EFCategoryDal());
         private readonly IFileProvider _fileProvider;
+        ResizeImage resize = new ResizeImage();
 
         public CategoryController(IFileProvider fileProvider)
         {
@@ -42,6 +44,7 @@ namespace MenuList.Controllers
                 {
                     file.CopyTo(stream);
                 }
+                resize.Resize(path, true);
                 category.CategoryImage = randomImageName;
             }
             else
@@ -89,6 +92,7 @@ namespace MenuList.Controllers
                 {
                     file.CopyTo(stream);
                 }
+                resize.Resize(path, true);
                 value.CategoryImage = randomImageName;
             }
 

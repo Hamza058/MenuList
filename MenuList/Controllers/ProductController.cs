@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using MenuList.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -11,8 +12,9 @@ namespace MenuList.Controllers
 	{
 		ProductManager pm = new ProductManager(new EFProductDal());
 		private readonly IFileProvider _fileProvider;
+        ResizeImage resize = new ResizeImage();
 
-		public ProductController(IFileProvider fileProvider)
+        public ProductController(IFileProvider fileProvider)
 		{
 			_fileProvider = fileProvider;
 		}
@@ -57,6 +59,7 @@ namespace MenuList.Controllers
                 {
                     file.CopyTo(stream);
                 }
+                resize.Resize(path, false);
                 product.Image = randomImageName;
             }
 			else
@@ -103,8 +106,9 @@ namespace MenuList.Controllers
 				using (var stream = new FileStream(path, FileMode.Create))
 				{
 					file.CopyTo(stream);
-				}
-				value.Image = randomImageName;
+                }
+                resize.Resize(path, false);
+                value.Image = randomImageName;
 			}
 			pm.TUpdate(value);
             return Json(new { IsSuccess = "true" });
