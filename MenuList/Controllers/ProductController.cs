@@ -64,7 +64,7 @@ namespace MenuList.Controllers
             }
 			else
 			{
-				product.Image = "product.jpg";
+				product.Image = "product.png";
 			}
 
 			pm.TAdd(product);
