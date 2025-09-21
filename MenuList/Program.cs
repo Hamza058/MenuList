@@ -15,25 +15,13 @@ builder.Services.AddControllersWithViews()
 	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
 
-builder.Services.AddMvc();
-
-builder.Services.AddMvc(config =>
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
 {
-    var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-    config.Filters.Add(new AuthorizeFilter(policy));
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
-
-builder.Services.AddAuthentication(
-    CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x =>
-    {
-        x.LoginPath = "/User/Login";
-    }
-    );
-
-builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -51,7 +39,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
-app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

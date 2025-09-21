@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using MenuList.Filter;
 using MenuList.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace MenuList.Controllers
 {
+    [SessionAuthorize]
     public class CategoryController : Controller
     {
         CategoryManager cm = new CategoryManager(new EFCategoryDal());

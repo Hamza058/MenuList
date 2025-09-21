@@ -1,22 +1,15 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using MenuList.Filter;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MenuList.Controllers
 {
-    [AllowAnonymous]
     public class UserController : Controller
     {
         UserManager um = new UserManager(new EFUserDal());
 
-        public IActionResult Admin()
-        {
-            return View();
-        }
         [HttpGet]
         public IActionResult Login()
         {
@@ -24,20 +17,14 @@ namespace MenuList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(User user)
+        public IActionResult Login(User user)
         {
             var users = um.TGetList();
             var value = users.FirstOrDefault(x=>x.UserName == user.UserName && BCrypt.Net.BCrypt.Verify(user.Password, x.Password));
-            HttpContext.Session.SetString("UserName", user.UserName);
+
             if (value != null)
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,value.UserName)
-                };
-                var useridentity = new ClaimsIdentity(claims, "A");
-                ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                await HttpContext.SignInAsync(principal);
+                HttpContext.Session.SetString("UserName", user.UserName);
                 return RedirectToAction("Admin", "Category");
             }
             else
@@ -47,48 +34,27 @@ namespace MenuList.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Register(User user)
-        {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            um.TAdd(user);
-
-            return RedirectToAction("Login");
-        }
+        [SessionAuthorize]
         [HttpGet]
         public IActionResult Update()
         {
             return View();
         }
+
+        [SessionAuthorize]
         [HttpPost]
-        public IActionResult Update(User user, string oldPassword)
+        public IActionResult Update(string password)
         {
-            var value = um.TGetList().FirstOrDefault(x => x.UserName == user.UserName && BCrypt.Net.BCrypt.Verify(oldPassword, x.Password));
-            if(value != null)
-            {
-                value.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                um.TUpdate(value);
-                return RedirectToAction("Login");
-            }
-            return RedirectToAction("Update");
+            var value = um.TGetList().FirstOrDefault(x => x.UserName == HttpContext.Session.GetString("UserName"));
+            value.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            um.TUpdate(value);
+            ViewBag.Message = "Parolanız Değiştirilmiştir";
+            return View();
         }
 
         public IActionResult ExitUser()
         {
             HttpContext.Session.Clear();
-            HttpContext.Session.Remove("UserName");
-
-            foreach (var cookie in Request.Cookies.Keys)
-            {
-                Response.Cookies.Delete(cookie);
-            }
-
             return RedirectToAction("Index", "Product");
         }
     }

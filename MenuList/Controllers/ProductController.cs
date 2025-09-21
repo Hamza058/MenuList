@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using MenuList.Filter;
 using MenuList.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,8 @@ using Microsoft.Extensions.FileProviders;
 
 namespace MenuList.Controllers
 {
-	public class ProductController : Controller
+    [SessionAuthorize]
+    public class ProductController : Controller
 	{
 		ProductManager pm = new ProductManager(new EFProductDal());
 		private readonly IFileProvider _fileProvider;
@@ -87,7 +89,7 @@ namespace MenuList.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Update(Product product, IFormFile file)
+		public async Task<IActionResult> Update(Product product, IFormFile file)
 		{
 			var value = pm.TGetById(product.ProductId);
 			value.ProductName = product.ProductName;
@@ -105,7 +107,7 @@ namespace MenuList.Controllers
 				var path = Path.Combine(images.PhysicalPath, randomImageName);
 				using (var stream = new FileStream(path, FileMode.Create))
 				{
-					file.CopyTo(stream);
+                    await file.CopyToAsync(stream);
                 }
                 resize.Resize(path, false);
                 value.Image = randomImageName;
